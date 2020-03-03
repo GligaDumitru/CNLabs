@@ -30,9 +30,6 @@ def createArrForComparison(n):
     return res
 
 
-
-
-
 def randomNumber(min, max):
     return random.randint(min, max)
 
@@ -66,26 +63,90 @@ def getRandomMatrix(n):
     return arr
 
 
-
-
 def getNCombinationsOfSummLines():
-    matrixA = getRandomMatrix(n)
     matrixB = getRandomMatrix(n)
 
-    # arrOfSubmatrixA = getArrOfSmallMatrix(matrixA)
     arrOfSubmatrixB = getArrOfSmallMatrix(matrixB, False)
     listOfBinariesCombinations = createArrForComparison(n)
 
-    sublistOfNxNinB = []
+    subListOfNxNinB = []
     for submatrixBi in arrOfSubmatrixB:
-
+        resultForBi = []
         for i in listOfBinariesCombinations:
             tempRes = []
-            for j in range(len(i)):
-                if(i[j] == 1):
-                    tempRes.append(np.array(submatrixBi[j]))
+            temp3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-getNCombinationsOfSummLines()
+            for j in range(len(i)):
+                if (i[j] == 1):
+                    # j is the pos ex: 0 0 1 0 => j = 1
+                    tempRes.append(np.array(submatrixBi[j]))
+            if tempRes is not []:
+                for el in tempRes:
+                    temp3 = np.logical_or(np.array(temp3), np.array(el))
+
+            resultForBi.append(temp3)
+        # print(resultForBi)
+        subListOfNxNinB.append(resultForBi)
+    return subListOfNxNinB
+
+
+def getTheIndexFromBinaryArray(arr):
+    res = 0
+    sz = len(arr)
+    for i in range(len(arr)):
+        if (arr[i] == 1):
+            res = res + 2 ** (sz - i - 1)
+    return res
+
+
+def getNCombinationsForCxCMatrixFinal():
+    matrixA = getRandomMatrix(n)
+    arrOfSubmatrixA = getArrOfSmallMatrix(matrixA)
+    dataProcessedFromB = np.array(getNCombinationsOfSummLines())
+
+    matrixWithAllCi = []
+    for subMatrix in range(len(arrOfSubmatrixA)):
+        result1 = []
+        for line in arrOfSubmatrixA[subMatrix]:
+            tempIndex = getTheIndexFromBinaryArray(line)
+            result1.append(dataProcessedFromB[subMatrix][tempIndex])
+            # tempResForEveryCmatrix = []
+            # print(np.array(elFromA))
+        matrixWithAllCi.append(result1)
+    return matrixWithAllCi
+
+
+def getFinalFinalMatrix(matrix):
+    # print(matrix)
+    resultFinal = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]
+    res3 = []
+    for i in range(len(matrix)):
+        # print(matrix[i])
+        res12 = []
+        for j in range(len(matrix[i])):
+            res12.append(np.logical_or(np.array(resultFinal[j]), np.array(matrix[i][j])))
+        res3.append(res12)
+    print(len(res3))
+    #
+    # return np.array(resultFinal)
 
 
 def problema1():
@@ -106,7 +167,5 @@ def getRoundNumbers():
             result.append(i)
     return result
 
-
-# print(getRoundNumbers())
-
-getRandomMatrix(n)
+getFinalFinalMatrix(getNCombinationsForCxCMatrixFinal())
+# print(getFinalFinalMatrix(getNCombinationsForCxCMatrixFinal()))
